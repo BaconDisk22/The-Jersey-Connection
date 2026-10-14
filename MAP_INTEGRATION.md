@@ -19,3 +19,7 @@ Without that environment variable the app continues to use the upstream hosted s
 - External links open in the system browser.
 - A missing local server produces an offline window state, not a claim that a working local map exists.
 - Verify CI and an actual Intel Mac installation before releasing.
+
+## Development server now available
+
+From `macos/`, run `npm run serve:local` in one terminal and `JERSEY_MAP_MODE=local npm start` in another. The local server serves the fork's `website/` assets on loopback only. **By default it deliberately serves an empty `{}` node snapshot, not live mesh data.** For a trusted, locally saved nodes JSON object set `JERSEY_NODES_FILE=/absolute/path/to/nodes.json` when starting the server. No public MQTT feed, backend, or network collection is included. The server is for development and is not bundled into the DMG.
