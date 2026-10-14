@@ -1,0 +1,23 @@
+name: Open Development Pull Requests
+on:
+  push:
+    branches:
+      - 'feature/**'
+      - 'fix/**'
+      - 'automation/**'
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  open-pr:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create a PR for new development branches
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          BRANCH: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          if [[ "$(gh api "repos/$REPO/pulls?state=open&head=${REPO%%/*}:$BRANCH" --jq 'length')" != 0 ]]; then exit 0; fi
+          gh pr create --repo "$REPO" --base main --head "$BRANCH" --title "Development: $BRANCH" --body "Automated development PR. CI must pass. Sensitive changes require manual review." || echo "PR creation may require Settings → Actions → General → Allow GitHub Actions to create and approve pull requests."
