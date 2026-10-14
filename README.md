@@ -1,4 +1,22 @@
-# [MeshMap.net](https://meshmap.net/)
+# 🤌 WHAT EXIT?! MESH
+
+**Fuggedaboutit. We know where your nodes are.**
+
+A Garden State–inspired fork of [MeshMap.net](https://meshmap.net/) by the original contributors. Built for Jersey attitude, powered by Meshtastic node data.
+
+## Garden State edition
+- Garden State green, Turnpike black, Shore blue, and Jersey gold.
+- Jersey-style map branding and installable app name.
+- Original node search, live map, telemetry, and MQTT reporting behavior retained.
+- From the Parkway to the Pine Barrens: **What exit is your node?**
+
+> Pork roll or Taylor ham? Either way, keep your nodes connected.
+
+**Fork maintained at:** https://github.com/BaconDisk22/meshmap.net
+
+**Original project:** https://github.com/brianshea2/meshmap.net
+
+
 A nearly live map of [Meshtastic](https://meshtastic.org/) nodes seen by the official Meshtastic MQTT server
 
 ## Features
