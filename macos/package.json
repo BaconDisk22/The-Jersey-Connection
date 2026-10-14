@@ -20,10 +20,7 @@
     "files": [
       "main.js",
       "package.json",
-      {
-        "from": "../website/demo.html",
-        "to": "../website/demo.html"
-      }
+      "demo.html"
     ],
     "mac": {
       "category": "public.app-category.utilities",
