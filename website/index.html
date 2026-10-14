@@ -2,9 +2,9 @@
 <html lang="en">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="theme-color" content="#006B3C">
-<meta name="description" content="WHAT EXIT?! MESH — Fuggedaboutit. We know where your nodes are.">
-<title>WHAT EXIT?! MESH — Garden State Node Map</title>
+<meta name="theme-color" content="#24834B">
+<meta name="description" content="THE JERSEY CONNECTION — Fuggedaboutit. We know where your nodes are.">
+<title>THE JERSEY CONNECTION — Garden State Node Map</title>
 <link rel="preload" href="/nodes.json" as="fetch" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900">
 <link rel="stylesheet" href="https://unpkg.com/font-awesome@4.7.0/css/font-awesome.min.css">
@@ -22,15 +22,15 @@
     margin: 0;
     padding: 0;
   }
-  body.dark { background: #111820; }
-  body.dark #header { background: #111820; color: #F4C542; }
+  body.dark { background: #20252B; }
+  body.dark #header { background: #20252B; color: #FFCA28; }
   body.dark .leaflet-control { color: #F5F7FA; }
   body.dark .leaflet-popup-content-wrapper, body.dark .leaflet-popup-tip { background: #222B35; color: #F5F7FA; }
   body.dark .leaflet-popup-content a { color: #39D98A; }
-  .leaflet-control-zoom a { color: #006B3C !important; }
+  .leaflet-control-zoom a { color: #24834B !important; }
   .marker-cluster-small, .marker-cluster-medium, .marker-cluster-large { background-color: rgba(0,107,60,.35) !important; }
-  .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div { background-color: #006B3C !important; color: #fff; }
-  #header::after { content: "WHAT EXIT?"; position: absolute; top: 40px; left: 12px; background: #F4C542; color: #111820; font: 700 11px Inter,sans-serif; padding: 5px 9px; border-radius: 0 0 7px 7px; pointer-events: none; }
+  .marker-cluster-small div, .marker-cluster-medium div, .marker-cluster-large div { background-color: #24834B !important; color: #fff; }
+  #header::after { content: "THE JERSEY CONNECTION"; position: absolute; top: 40px; left: 12px; background: #FFCA28; color: #20252B; font: 700 11px Inter,sans-serif; padding: 5px 9px; border-radius: 0 0 7px 7px; pointer-events: none; }
   body.dark .dark-hidden {
     display: none;
   }
@@ -38,7 +38,7 @@
     display: none;
   }
   #header {
-    background-color: #006B3C;
+    background-color: #24834B;
     box-shadow: 0 0 4px 0 rgb(0 0 0 / 40%);
     color: #F5F7FA;
     display: flex;
@@ -119,11 +119,11 @@
 <script>
   const toggleDark = () => {
     if (document.body.classList.toggle('dark')) {
-      document.querySelector('meta[name="theme-color"]').content = '#111820'
+      document.querySelector('meta[name="theme-color"]').content = '#20252B'
       window.localStorage.setItem('theme', 'dark')
       return true
     }
-    document.querySelector('meta[name="theme-color"]').content = '#006B3C'
+    document.querySelector('meta[name="theme-color"]').content = '#24834B'
     window.localStorage.removeItem('theme')
     return false
   }
@@ -133,7 +133,7 @@
 </script>
 <div id="header">
   <div>
-    <a href="https://github.com/BaconDisk22/meshmap.net" title="A nearly live map of Meshtastic nodes seen by the official Meshtastic MQTT server">🤌 WHAT EXIT?! MESH</a>
+    <a href="https://github.com/BaconDisk22/meshmap.net" title="A nearly live map of Meshtastic nodes seen by the official Meshtastic MQTT server">🤌 THE JERSEY CONNECTION</a>
   </div>
   <div>
     <a href="#" onclick="toggleDark();return false;" title="Toggle dark mode">
@@ -305,7 +305,7 @@
         detailsLayer.clearLayers()
         // precision rectangle
         if (precisionCorners) {
-          L.rectangle(precisionCorners, {color: '#F4C542'}).addTo(detailsLayer)
+          L.rectangle(precisionCorners, {color: '#FFCA28'}).addTo(detailsLayer)
         }
         // relation lines
         Object.entries(relationsByNode[nodeNum]).forEach(([relatedNum, relationObj]) => {
