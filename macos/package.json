@@ -1,0 +1,45 @@
+{
+  "name": "the-jersey-connection",
+  "version": "1.0.0-beta.1",
+  "private": true,
+  "description": "The Jersey Connection — Intel macOS desktop map",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --mac dmg zip --x64"
+  },
+  "devDependencies": {
+    "electron": "^33.4.11",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "org.thejerseyconnection.map",
+    "productName": "The Jersey Connection",
+    "files": [
+      "main.js",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.utilities",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64"
+          ]
+        },
+        {
+          "target": "zip",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "identity": null
+    },
+    "dmg": {
+      "title": "The Jersey Connection"
+    },
+    "artifactName": "The-Jersey-Connection-${version}-${arch}.${ext}"
+  }
+}
