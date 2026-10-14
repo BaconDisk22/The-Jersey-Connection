@@ -7,7 +7,7 @@ const MAP_MODE = process.env.JERSEY_MAP_MODE === 'local' ? 'local' : 'hosted';
 const ACTIVE_MAP = MAP_MODE === 'local' ? LOCAL_MAP : MAP_URL;
 const APP = 'The Jersey Connection';
 const DEMO_MODE = process.env.JERSEY_DEMO_MODE === '1';
-const DEMO_FILE = path.resolve(__dirname, '..', 'website', 'demo.html');
+const DEMO_FILE = path.join(__dirname, 'demo.html');
 const DEMO_URL = require('node:url').pathToFileURL(DEMO_FILE).href;
 let windows = new Set();
 let prefs = {favorites:[], places:[], notifications:false, launchAtLogin:false, theme:'system', restoreSession:true, lastUrl:ACTIVE_MAP};
