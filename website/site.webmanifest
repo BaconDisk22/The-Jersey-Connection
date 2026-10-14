@@ -12,6 +12,8 @@
       "type": "image/png"
     }
   ],
-  "name": "MeshMap.net",
-  "short_name": "MeshMap"
+  "name": "WHAT EXIT?! MESH",
+  "short_name": "What Exit?!",
+  "theme_color": "#006B3C",
+  "background_color": "#111820"
 }
