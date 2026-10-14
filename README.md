@@ -1,32 +1,49 @@
-# 🤌 WHAT EXIT?! MESH
+# 🤌 THE JERSEY CONNECTION 🇺🇸
 ### *Fuggedaboutit. We know where your nodes are.*
 
-**AYYY, HOW YA DOIN'?** Welcome to the Garden State's favorite way to keep tabs on Meshtastic nodes. Whether you're stuck on the Turnpike, grabbing a pork roll (or Taylor ham—don't start), or down the Shore, **WHAT EXIT?! MESH** puts the mesh on the map.
+**AYYY, HOW YA DOIN', PAISAN?** Welcome to **The Jersey Connection** — a New Jersey-flavored Meshtastic map project. Whether you're stuck on the Turnpike, debating pork roll versus Taylor Ham, or heading down the Shore, here's a way to see who's on the mesh. **What exit you from?**
 
-> **"What exit?"** The most important question in Jersey. Now it's also how you find your mesh.
+> **The Family Territory:** The map is nationwide, not just New Jersey. The jokes are Jersey; the radio data is real.
 
 ## 🍕 What's cookin'?
-- **The Family Map:** Browse position-reporting Meshtastic nodes seen through the public MQTT network.
-- **Who's This Guy?** Search nodes by name or ID.
-- **Fresh Gabagool:** Node data is updated approximately once a minute by the upstream service.
-- **No Ghosts at the Diner:** Nodes without an updated position for eight hours are removed from the map.
-- **Who's Talkin' to Who?** Explore observed LoRa relationships and neighbor links. These do not always indicate direct connections.
-- **Jersey Threads:** Garden State green, gold and Turnpike-dark styling.
+- **The Family Map:** Explore position-reporting Meshtastic nodes observed through the public MQTT network.
+- **Who's This Guy?:** Find a node by name or ID.
+- **Fresh Gabagool:** The upstream map updates node data approximately once a minute.
+- **Fuggedaboutit:** Nodes without updated positions for eight hours are removed from the upstream map.
+- **Who's Talkin' to Who?:** Inspect observed LoRa relationships and neighbor links. Lines do **not** necessarily indicate direct radio connections.
+- **The Parkway:** Network connections, with no toll booths.
+
+## 🎨 Garden State colors
+The planned Jersey theme uses these colors:
+
+| Jersey flavor | Color |
+| --- | --- |
+| Garden State green | `#24834B` |
+| Turnpike asphalt | `#20252B` |
+| Jersey blue | `#003B71` |
+| Jersey gold | `#FFCA28` |
+| Shore sand | `#F3E8CF` |
+| Taylor Ham red | `#C83737` |
+
+These are branding targets, not a claim that every screen has already been restyled.
 
 ## 🚗 Intel Mac? AYYY, WE GOTCHU.
-A macOS desktop wrapper and an Intel DMG build workflow live in `macos/` and `.github/workflows/macos-intel.yml`.
+**Target:** Intel (x86_64) Mac running macOS Tahoe 26.7.1, with a double-clickable **The Jersey Connection.app** and a downloadable DMG.
 
-**Heads up, paisan:** The desktop wrapper currently loads the upstream hosted map until a WHAT EXIT?! MESH deployment URL is configured. It is **not yet a self-contained offline map**. The Mac DMG is a development build and is not yet confirmed tested or notarized.
+**Chosen approach:** A desktop window connecting to the existing online [MeshMap.net](https://meshmap.net/) service. No local map backend or offline node database is planned for this edition.
 
-To build on GitHub, run **Actions → Build WHAT EXIT?! MESH for Intel Mac → Run workflow** once this workflow is on the default branch. Download the resulting artifact if the build succeeds.
+**Current status:** The Intel desktop application, DMG, and automated release workflow have **not yet been verified or published**. A working installer is not available from this README. Future builds should be validated before appearing in [Releases](https://github.com/BaconDisk22/The-Jersey-Connection/releases).
 
 ## 📡 How do I get my node in the family?
-Your node needs to report position data through the Meshtastic public MQTT system (directly or via another MQTT-connected node). Follow the [official Meshtastic MQTT documentation](https://meshtastic.org/docs/software/integrations/mqtt/) and its public-server restrictions. Keep location privacy in mind—don't broadcast precise coordinates if you don't intend to.
+Your node must report position data to Meshtastic's public MQTT system, either directly or through another reporting node. Read the [official Meshtastic MQTT documentation](https://meshtastic.org/docs/software/integrations/mqtt/) and the public-server restrictions. Think carefully about location privacy before sharing position information.
 
 ## 🛠️ For the wiseguys running their own setup
-This fork keeps the upstream Go ingestion service and website architecture. See `cmd/meshobserv/`, `internal/`, `website/`, and `Dockerfile.meshobserv` for the original components. The map expects a working `/nodes.json` endpoint. Branding alone does not deploy a live feed.
+This fork retains the upstream Go ingestion service and website architecture. The original source includes `cmd/meshobserv/`, `internal/`, `website/`, and `Dockerfile.meshobserv`. The map requires a functioning `/nodes.json` data endpoint when independently hosted. A new coat of Jersey paint doesn't magically deploy the backend, capisce?
+
+## 📦 Releases & packages
+The planned first release is **v1.0.0-beta.1**, prioritizing an Intel Mac DMG and zipped app. Release artifacts will be listed in [GitHub Releases](https://github.com/BaconDisk22/The-Jersey-Connection/releases) **only after successful builds**. Signing and notarization may be needed for a smooth macOS installation.
 
 ## 🤝 Respect the family
-**WHAT EXIT?! MESH** is a Jersey-themed fork of [MeshMap.net by Brian Shea](https://github.com/brianshea2/meshmap.net). Full credit to the original project and Meshtastic contributors. This fork is independent and is **not an official Meshtastic application**. Original license and copyright notices remain in place.
+**The Jersey Connection** is an independent, unofficial themed fork of [MeshMap.net by Brian Shea](https://github.com/brianshea2/meshmap.net). Credit belongs to the original maintainers and Meshtastic contributors; original licensing and copyright notices must be preserved. This project is not an official Meshtastic application and is not affiliated with any television show or commercial brand.
 
 Built with love, radio waves, and enough Jersey attitude to fill the Parkway. **Now pass the disco fries.** 🍟
