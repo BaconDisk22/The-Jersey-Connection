@@ -1,0 +1,54 @@
+name: Guarded Auto Merge
+on:
+  workflow_run:
+    workflows: ["Jersey PR Checks"]
+    types: [completed]
+permissions:
+  contents: read
+  pull-requests: write
+concurrency:
+  group: jersey-automerge-${{ github.event.workflow_run.head_sha }}
+  cancel-in-progress: false
+jobs:
+  enable:
+    runs-on: ubuntu-latest
+    if: github.event.workflow_run.event == 'pull_request' && github.event.workflow_run.conclusion == 'success'
+    steps:
+      - name: Enable auto-merge only for trusted, non-sensitive PRs
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPO: ${{ github.repository }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+          HEAD_SHA: ${{ github.event.workflow_run.head_sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          # No checkout or execution of pull request code with write permissions.
+          prs="$(gh api "repos/$REPO/actions/runs/$RUN_ID" --jq '.pull_requests[].number')"
+          for pr in $prs; do
+            data="$(gh api "repos/$REPO/pulls/$pr")"
+            state="$(jq -r '.state' <<<"$data")"
+            draft="$(jq -r '.draft' <<<"$data")"
+            author="$(jq -r '.user.login' <<<"$data")"
+            head_repo="$(jq -r '.head.repo.full_name' <<<"$data")"
+            head_ref="$(jq -r '.head.ref' <<<"$data")"
+            actual_sha="$(jq -r '.head.sha' <<<"$data")"
+            base="$(jq -r '.base.ref' <<<"$data")"
+            # Only automation/* branches within this fork or Dependabot's own PRs.
+            if [[ "$state" != open || "$draft" != false || "$base" != main || "$actual_sha" != "$HEAD_SHA" ]]; then continue; fi
+            if [[ "$head_repo" != "$REPO" ]]; then continue; fi
+            if [[ "$head_ref" == automation/* && "$author" == BaconDisk22 ]]; then
+              :
+            elif [[ "$author" == dependabot\[bot\] && "$head_ref" == dependabot/* ]]; then
+              :
+            else
+              echo "PR #$pr is not in the guarded automation allowlist"; continue
+            fi
+            # Workflow, app permissions, scripts, and release-related files always need manual approval.
+            files="$(gh api --paginate "repos/$REPO/pulls/$pr/files" --jq '.[].filename')"
+            if grep -Eq '^(\.github/|macos/(main\.js|package\.json|package-lock\.json)|.*\.(sh|command)$)' <<<"$files"; then
+              echo "PR #$pr touches protected paths; manual review required"; continue
+            fi
+            echo "Enabling guarded auto-merge for PR #$pr"
+            gh pr merge "$pr" --repo "$REPO" --auto --squash --delete-branch || echo "Auto-merge unavailable; configure repository auto-merge and branch protection"
+          done
