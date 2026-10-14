@@ -4,9 +4,10 @@ on:
   workflow_dispatch:
   push:
     branches: [main]
-    paths:
-      - 'macos/**'
-      - '.github/workflows/macos-intel.yml'
+    tags: ['v*']
+
+permissions:
+  contents: write
 
 jobs:
   macos-intel:
@@ -27,3 +28,10 @@ jobs:
         with:
           name: WHAT-EXIT-MESH-Intel-Mac
           path: WHAT-EXIT-MESH-Intel-Mac.dmg
+
+      - name: Publish prerelease package
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" WHAT-EXIT-MESH-Intel-Mac.dmg --title "🤌 WHAT EXIT?! MESH ${GITHUB_REF_NAME}" --notes "Intel Mac beta build. Requires internet access; currently loads the upstream hosted map until a custom deployment is configured. Not notarized." --prerelease
