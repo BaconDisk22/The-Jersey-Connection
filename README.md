@@ -1,88 +1,32 @@
-# 🤌 THE JERSEY CONNECTION 🇺🇸
+# 🤌 WHAT EXIT?! MESH
+### *Fuggedaboutit. We know where your nodes are.*
 
-**Fuggedaboutit. We know where your nodes are.**
+**AYYY, HOW YA DOIN'?** Welcome to the Garden State's favorite way to keep tabs on Meshtastic nodes. Whether you're stuck on the Turnpike, grabbing a pork roll (or Taylor ham—don't start), or down the Shore, **WHAT EXIT?! MESH** puts the mesh on the map.
 
-*What exit you from?* Welcome to **The Jersey Connection**, a Garden State-flavored fork of [MeshMap.net](https://meshmap.net/) showing Meshtastic nodes heard by the official public MQTT service. Same real mesh data, a little more Jersey attitude. Capisce?
+> **"What exit?"** The most important question in Jersey. Now it's also how you find your mesh.
 
-## 🍕 The Family Business
+## 🍕 What's cookin'?
+- **The Family Map:** Browse position-reporting Meshtastic nodes seen through the public MQTT network.
+- **Who's This Guy?** Search nodes by name or ID.
+- **Fresh Gabagool:** Node data is updated approximately once a minute by the upstream service.
+- **No Ghosts at the Diner:** Nodes without an updated position for eight hours are removed from the map.
+- **Who's Talkin' to Who?** Explore observed LoRa relationships and neighbor links. These do not always indicate direct connections.
+- **Jersey Threads:** Garden State green, gold and Turnpike-dark styling.
 
-- **The Family Territory:** A nearly live map of publicly reported Meshtastic nodes, not just Jersey.
-- **Find a Guy:** Search by node name or ID.
-- **The Parkway:** Explore reported radio connections (not necessarily direct hops).
-- **Gimme a Sec:** Upstream data updates about every minute; positions older than eight hours drop off.
+## 🚗 Intel Mac? AYYY, WE GOTCHU.
+A macOS desktop wrapper and an Intel DMG build workflow live in `macos/` and `.github/workflows/macos-intel.yml`.
 
-## 🚗 Intel Mac edition (planned)
+**Heads up, paisan:** The desktop wrapper currently loads the upstream hosted map until a WHAT EXIT?! MESH deployment URL is configured. It is **not yet a self-contained offline map**. The Mac DMG is a development build and is not yet confirmed tested or notarized.
 
-A double-clickable **The Jersey Connection.app** for Intel Macs running macOS Tahoe is planned. It will connect to the existing online MeshMap service; no local backend is intended. **No .app or .dmg installer has been released yet.**
+To build on GitHub, run **Actions → Build WHAT EXIT?! MESH for Intel Mac → Run workflow** once this workflow is on the default branch. Download the resulting artifact if the build succeeds.
 
-## 🎨 Jersey colors
+## 📡 How do I get my node in the family?
+Your node needs to report position data through the Meshtastic public MQTT system (directly or via another MQTT-connected node). Follow the [official Meshtastic MQTT documentation](https://meshtastic.org/docs/software/integrations/mqtt/) and its public-server restrictions. Keep location privacy in mind—don't broadcast precise coordinates if you don't intend to.
 
-| Color | Hex |
-| --- | --- |
-| Garden State green | #24834B |
-| Turnpike asphalt | #20252B |
-| Jersey blue | #003B71 |
-| Jersey gold | #FFCA28 |
-| Shore sand | #F3E8CF |
-| Taylor Ham red | #C83737 |
+## 🛠️ For the wiseguys running their own setup
+This fork keeps the upstream Go ingestion service and website architecture. See `cmd/meshobserv/`, `internal/`, `website/`, and `Dockerfile.meshobserv` for the original components. The map expects a working `/nodes.json` endpoint. Branding alone does not deploy a live feed.
 
-## 🤌 Get your radio into the family
+## 🤝 Respect the family
+**WHAT EXIT?! MESH** is a Jersey-themed fork of [MeshMap.net by Brian Shea](https://github.com/brianshea2/meshmap.net). Full credit to the original project and Meshtastic contributors. This fork is independent and is **not an official Meshtastic application**. Original license and copyright notices remain in place.
 
-Follow the original setup notes below. The Jersey theme does not change MQTT requirements or your radio settings.
-
-## 🙏 Respect to the original crew
-
-An unofficial, independent themed fork of **MeshMap.net**. Credit to the original maintainers and contributors. Preserve original license and attribution. No affiliation with Meshtastic or any television or commercial brand is implied.
-
----
-
-## 📻 Original MeshMap documentation
-
-# [MeshMap.net](https://meshmap.net/)
-A nearly live map of [Meshtastic](https://meshtastic.org/) nodes seen by the official Meshtastic MQTT server
-
-## Features
-- Shows all position-reporting nodes heard by Meshtastic's [Public MQTT Server](https://meshtastic.org/docs/software/integrations/mqtt/#public-mqtt-server)
-  - Includes nodes self-reporting to MQTT or heard by another node reporting to MQTT
-- Node data is updated every minute
-- Nodes are removed from the map if their position is not updated after 8 hours
-- Search for nodes by name or ID
-
-## FAQs
-
-### How do I get my node on the map?
-These are general requirements. Refer to the [official docs](https://meshtastic.org/docs/) or reach out to the fantastic [Meshtastic](https://meshtastic.org/) community for additional support.
-- First, make sure you are running a [recent firmware](https://meshtastic.org/downloads/) version
-- Use the default primary channel and encryption key
-- Enable "OK to MQTT" in LoRa configuration, signaling you want your messages uplinked via MQTT
-- Enable position reports from your node
-  - This may mean enabling your node's built-in GPS, sharing your phone's location via the app, or setting a fixed position
-  - Ensure "Position enabled" is enabled on the primary channel
-  - Ensure "Precise location" is disabled on the primary channel and the configured precision is between 23.3 km (14.5 miles) and 364 m (1194 ft), inclusive
-    - See [Restrictions on the Public MQTT Server](https://meshtastic.org/docs/software/integrations/mqtt/#restrictions-on-the-public-mqtt-server) for details
-
-If your node can be heard by another node already reporting to MQTT, that's it!
-
-#### To enable MQTT reporting
-- Enable the MQTT module, using all default settings, possibly with a custom root topic
-  - View nodes around your area on the map to find MQTT topics being used
-- Configure your node to connect to wifi or otherwise connect to the internet
-- Enable MQTT uplink on your primary channel
-  - It is not necessary, and not recommended unless you know what you're doing, to enable MQTT downlink
-
-Note: The "Map reporting" option in the MQTT configuration reports [additional data](https://meshtastic.org/docs/configuration/module/mqtt/#map-reporting-enabled) about your node only. It does not report other nodes heard over LoRa.
-
-### Does the map allow manual/self-reported nodes (not over MQTT)?
-No, and that's a feature. The goal of this map is to provide a reasonably up-to-date, reliable data source for node locations.
-
-### What do the lines drawn between nodes represent?
-When a node is selected, lines may appear between it and nearby nodes.
-These lines indicate communication between nodes over LoRa, but not necessarily a direct connection.
-Nodes reporting to MQTT are shown to be communicating with the nodes they report, but the path (hops) is unknown.
-[Neighbor Info](https://meshtastic.org/docs/configuration/module/neighbor-info/) reports are parsed to show connections between neighbors.
-
-### Can you add this awesome new feature I just came up with? (Or you'd like to report a bug)
-Maybe! Open a GitHub issue and let's discuss it. Pull requests welcome!
-
-### Can I use your code for my own map?
-Sure! But please pay attention to the license so we can all benefit from your improvements. :)
+Built with love, radio waves, and enough Jersey attitude to fill the Parkway. **Now pass the disco fries.** 🍟
