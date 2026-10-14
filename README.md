@@ -5,6 +5,18 @@
 
 > **The Family Territory:** The map is nationwide, not just New Jersey. The jokes are Jersey; the radio data is real.
 
+## 📸 The Jersey Connection — Demo Screenshots
+
+The images below are **automatically generated from fictional demonstration data** by GitHub Actions. They are not live Meshtastic nodes or actual GPS positions. The screenshot workflow commits updated PNGs to `screenshots/` on successful runs against `main`.
+
+### Desktop demo
+
+![The Jersey Connection desktop demo — simulated data](screenshots/jersey-demo-desktop.png)
+
+### Mobile-sized preview
+
+![The Jersey Connection mobile-sized demo — simulated data](screenshots/jersey-demo-mobile.png)
+
 ## 🍕 What's cookin'?
 - **The Family Map:** Explore position-reporting Meshtastic nodes observed through the public MQTT network.
 - **Who's This Guy?:** Find a node by name or ID.

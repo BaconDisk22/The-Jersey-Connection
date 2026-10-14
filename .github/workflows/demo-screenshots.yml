@@ -1,0 +1,47 @@
+name: Jersey Demo Screenshots
+on:
+  pull_request:
+    branches: [main]
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'screenshots/**'
+      - 'README.md'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  screenshots:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright Chromium
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Capture demo screenshots
+        run: node scripts/capture-demo.cjs
+      - name: Commit screenshots for README on main
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add screenshots/jersey-demo-desktop.png screenshots/jersey-demo-mobile.png
+          if ! git diff --cached --quiet; then
+            git commit -m 'docs: refresh demo screenshots [skip ci]'
+            git push origin HEAD:main
+          fi
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        with:
+          name: jersey-demo-screenshots
+          path: screenshots/*.png
+          if-no-files-found: error

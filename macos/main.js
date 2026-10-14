@@ -6,9 +6,12 @@ const LOCAL_MAP = 'http://127.0.0.1:8765/';
 const MAP_MODE = process.env.JERSEY_MAP_MODE === 'local' ? 'local' : 'hosted';
 const ACTIVE_MAP = MAP_MODE === 'local' ? LOCAL_MAP : MAP_URL;
 const APP = 'The Jersey Connection';
+const DEMO_MODE = process.env.JERSEY_DEMO_MODE === '1';
+const DEMO_FILE = path.join(__dirname, 'demo.html');
+const DEMO_URL = require('node:url').pathToFileURL(DEMO_FILE).href;
 let windows = new Set();
 let prefs = {favorites:[], places:[], notifications:false, launchAtLogin:false, theme:'system', restoreSession:true, lastUrl:ACTIVE_MAP};
-const isMapUrl = url => { try {const u=new URL(url);return (u.protocol==='https:' && u.hostname==='meshmap.net' || MAP_MODE==='local' && u.protocol==='http:' && u.hostname==='127.0.0.1' && u.port==='8765');}catch{return false;} };
+const isMapUrl = url => { if(DEMO_MODE && url===DEMO_URL)return true;try {const u=new URL(url);return (u.protocol==='https:' && u.hostname==='meshmap.net' || MAP_MODE==='local' && u.protocol==='http:' && u.hostname==='127.0.0.1' && u.port==='8765');}catch{return false;} };
 const prefsPath = () => path.join(app.getPath('userData'),'jersey-preferences.json');
 function loadPrefs(){try{const p=JSON.parse(fs.readFileSync(prefsPath(),'utf8'));prefs={...prefs,...p};}catch{}}
 function savePrefs(){try{fs.mkdirSync(app.getPath('userData'),{recursive:true});fs.writeFileSync(prefsPath(),JSON.stringify(prefs,null,2));}catch(e){console.error('Could not save settings',e);}}
@@ -31,7 +34,7 @@ function openWindow(url=ACTIVE_MAP){
  win.webContents.on('did-finish-load',()=>win.setTitle(APP+' — Connected'));
  win.webContents.on('did-fail-load',(_e,code,description,url,isMainFrame)=>{if(isMainFrame){win.setTitle(APP+' — Offline');notify('Fuggedaboutit Alerts','The map service is unavailable.');}});
  win.webContents.on('render-process-gone',()=>{win.setTitle(APP+' — Recovering');setTimeout(()=>{if(!win.isDestroyed())win.loadURL(ACTIVE_MAP);},1200);});
- win.loadURL(isMapUrl(url)?url:ACTIVE_MAP);
+ win.loadURL(DEMO_MODE?DEMO_URL:(isMapUrl(url)?url:ACTIVE_MAP));
  return win;
 }
 function rebuildMenu(){
@@ -46,5 +49,5 @@ function rebuildMenu(){
  Menu.setApplicationMenu(menu);
 }
 function setTheme(theme){prefs.theme=theme;nativeTheme.themeSource=theme;savePrefs();rebuildMenu();}
-app.whenReady().then(()=>{app.setName(APP);loadPrefs();nativeTheme.themeSource=prefs.theme;rebuildMenu();openWindow(prefs.restoreSession&&isMapUrl(prefs.lastUrl)?prefs.lastUrl:ACTIVE_MAP);app.on('activate',()=>{if(BrowserWindow.getAllWindows().length===0)openWindow();});});
+app.whenReady().then(()=>{app.setName(APP);loadPrefs();nativeTheme.themeSource=prefs.theme;rebuildMenu();openWindow(DEMO_MODE?DEMO_URL:(prefs.restoreSession&&isMapUrl(prefs.lastUrl)?prefs.lastUrl:ACTIVE_MAP));app.on('activate',()=>{if(BrowserWindow.getAllWindows().length===0)openWindow();});});
 app.on('window-all-closed',()=>{if(process.platform!=='darwin')app.quit();});
