@@ -1,0 +1,37 @@
+name: Build WHAT EXIT?! MESH for Intel Mac
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  macos-intel:
+    runs-on: macos-15-intel
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Intel Mac app
+        run: |
+          set -euo pipefail
+          APP="WHAT EXIT MESH.app"
+          mkdir -p "$APP/Contents/MacOS"
+          cp macos/Info.plist "$APP/Contents/Info.plist"
+          swiftc -target x86_64-apple-macos13.0 -framework Cocoa -framework WebKit macos/WhatExitMesh.swift -o "$APP/Contents/MacOS/WhatExitMesh"
+          chmod +x "$APP/Contents/MacOS/WhatExitMesh"
+          codesign --force --sign - "$APP"
+          hdiutil create -volname "WHAT EXIT MESH" -srcfolder "$APP" -ov -format UDZO WHAT-EXIT-MESH-Intel-Mac.dmg
+      - uses: actions/upload-artifact@v4
+        with:
+          name: WHAT-EXIT-MESH-Intel-Mac
+          path: WHAT-EXIT-MESH-Intel-Mac.dmg
+
+      - name: Publish prerelease package
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "${GITHUB_REF_NAME}" WHAT-EXIT-MESH-Intel-Mac.dmg --title "🤌 WHAT EXIT?! MESH ${GITHUB_REF_NAME}" --notes "Intel Mac beta build. Requires internet access; currently loads the upstream hosted map until a custom deployment is configured. Not notarized." --prerelease
