@@ -1,3 +1,43 @@
+# 🤌 THE JERSEY CONNECTION 🇺🇸
+
+**Fuggedaboutit. We know where your nodes are.**
+
+*What exit you from?* Welcome to **The Jersey Connection**, a Garden State-flavored fork of [MeshMap.net](https://meshmap.net/) showing Meshtastic nodes heard by the official public MQTT service. Same real mesh data, a little more Jersey attitude. Capisce?
+
+## 🍕 The Family Business
+
+- **The Family Territory:** A nearly live map of publicly reported Meshtastic nodes, not just Jersey.
+- **Find a Guy:** Search by node name or ID.
+- **The Parkway:** Explore reported radio connections (not necessarily direct hops).
+- **Gimme a Sec:** Upstream data updates about every minute; positions older than eight hours drop off.
+
+## 🚗 Intel Mac edition (planned)
+
+A double-clickable **The Jersey Connection.app** for Intel Macs running macOS Tahoe is planned. It will connect to the existing online MeshMap service; no local backend is intended. **No .app or .dmg installer has been released yet.**
+
+## 🎨 Jersey colors
+
+| Color | Hex |
+| --- | --- |
+| Garden State green | #24834B |
+| Turnpike asphalt | #20252B |
+| Jersey blue | #003B71 |
+| Jersey gold | #FFCA28 |
+| Shore sand | #F3E8CF |
+| Taylor Ham red | #C83737 |
+
+## 🤌 Get your radio into the family
+
+Follow the original setup notes below. The Jersey theme does not change MQTT requirements or your radio settings.
+
+## 🙏 Respect to the original crew
+
+An unofficial, independent themed fork of **MeshMap.net**. Credit to the original maintainers and contributors. Preserve original license and attribution. No affiliation with Meshtastic or any television or commercial brand is implied.
+
+---
+
+## 📻 Original MeshMap documentation
+
 # [MeshMap.net](https://meshmap.net/)
 A nearly live map of [Meshtastic](https://meshtastic.org/) nodes seen by the official Meshtastic MQTT server
 
