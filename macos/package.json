@@ -7,7 +7,8 @@
   "scripts": {
     "start": "electron .",
     "dist": "electron-builder --mac dmg zip --x64",
-    "serve:local": "node local-server.js"
+    "serve:local": "node local-server.js",
+    "demo": "JERSEY_DEMO_MODE=1 electron ."
   },
   "devDependencies": {
     "electron": "^33.4.11",
@@ -18,7 +19,11 @@
     "productName": "The Jersey Connection",
     "files": [
       "main.js",
-      "package.json"
+      "package.json",
+      {
+        "from": "../website/demo.html",
+        "to": "../website/demo.html"
+      }
     ],
     "mac": {
       "category": "public.app-category.utilities",
