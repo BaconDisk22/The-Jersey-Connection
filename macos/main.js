@@ -2,23 +2,26 @@ const {app, BrowserWindow, shell, Menu, nativeTheme, Notification, dialog} = req
 const fs = require('node:fs');
 const path = require('node:path');
 const MAP_URL = 'https://meshmap.net/';
+const LOCAL_MAP = 'http://127.0.0.1:8765/';
+const MAP_MODE = process.env.JERSEY_MAP_MODE === 'local' ? 'local' : 'hosted';
+const ACTIVE_MAP = MAP_MODE === 'local' ? LOCAL_MAP : MAP_URL;
 const APP = 'The Jersey Connection';
 let windows = new Set();
-let prefs = {favorites:[], places:[], notifications:false, launchAtLogin:false, theme:'system', restoreSession:true, lastUrl:MAP_URL};
-const isMapUrl = url => { try {const u=new URL(url);return u.protocol==='https:' && u.hostname==='meshmap.net';}catch{return false;} };
+let prefs = {favorites:[], places:[], notifications:false, launchAtLogin:false, theme:'system', restoreSession:true, lastUrl:ACTIVE_MAP};
+const isMapUrl = url => { try {const u=new URL(url);return (u.protocol==='https:' && u.hostname==='meshmap.net' || MAP_MODE==='local' && u.protocol==='http:' && u.hostname==='127.0.0.1' && u.port==='8765');}catch{return false;} };
 const prefsPath = () => path.join(app.getPath('userData'),'jersey-preferences.json');
 function loadPrefs(){try{const p=JSON.parse(fs.readFileSync(prefsPath(),'utf8'));prefs={...prefs,...p};}catch{}}
 function savePrefs(){try{fs.mkdirSync(app.getPath('userData'),{recursive:true});fs.writeFileSync(prefsPath(),JSON.stringify(prefs,null,2));}catch(e){console.error('Could not save settings',e);}}
 function safeName(s){return String(s).trim().slice(0,80);}
 function notify(title,body){if(prefs.notifications&&Notification.isSupported())new Notification({title,body}).show();}
-function currentUrl(){const w=BrowserWindow.getFocusedWindow();return w && isMapUrl(w.webContents.getURL())?w.webContents.getURL():MAP_URL;}
+function currentUrl(){const w=BrowserWindow.getFocusedWindow();return w && isMapUrl(w.webContents.getURL())?w.webContents.getURL():ACTIVE_MAP;}
 function promptName(win, label, callback){
   const options=['Save','Cancel'];dialog.showMessageBox(win,{type:'question',title:label,message:'Save this map view?',detail:'The current map URL will be saved with an automatic label.',buttons:options,defaultId:0,cancelId:1}).then(({response})=>{if(response===0)callback();});
 }
 function addPlace(){const win=BrowserWindow.getFocusedWindow();if(!win)return;promptName(win,'The Neighborhood',()=>{const url=currentUrl();if(!prefs.places.some(p=>p.url===url)){prefs.places.push({name:'Map view '+(prefs.places.length+1),url});savePrefs();notify('The Neighborhood','Map view saved.');rebuildMenu();}});}
 function addFavorite(){const url=currentUrl();if(!url.includes('#')){dialog.showMessageBox({message:'Open a node on the map first, paisan!',type:'info'});return;}if(!prefs.favorites.some(p=>p.url===url)){prefs.favorites.push({name:'Crew member '+(prefs.favorites.length+1),url});savePrefs();notify('The Family','Node bookmarked.');rebuildMenu();}}
 function go(url){const w=BrowserWindow.getFocusedWindow()||[...windows][0];if(w && isMapUrl(url))w.loadURL(url);}
-function openWindow(url=MAP_URL){
+function openWindow(url=ACTIVE_MAP){
  const win=new BrowserWindow({width:1320,height:860,minWidth:820,minHeight:550,title:APP,backgroundColor:'#20252B',webPreferences:{nodeIntegration:false,contextIsolation:true,sandbox:true}});
  windows.add(win);
  win.on('closed',()=>windows.delete(win));
@@ -27,8 +30,8 @@ function openWindow(url=MAP_URL){
  win.webContents.on('did-navigate',(_e,url)=>{if(isMapUrl(url)){prefs.lastUrl=url;savePrefs();}});
  win.webContents.on('did-finish-load',()=>win.setTitle(APP+' — Connected'));
  win.webContents.on('did-fail-load',(_e,code,description,url,isMainFrame)=>{if(isMainFrame){win.setTitle(APP+' — Offline');notify('Fuggedaboutit Alerts','The map service is unavailable.');}});
- win.webContents.on('render-process-gone',()=>{win.setTitle(APP+' — Recovering');setTimeout(()=>{if(!win.isDestroyed())win.loadURL(MAP_URL);},1200);});
- win.loadURL(isMapUrl(url)?url:MAP_URL);
+ win.webContents.on('render-process-gone',()=>{win.setTitle(APP+' — Recovering');setTimeout(()=>{if(!win.isDestroyed())win.loadURL(ACTIVE_MAP);},1200);});
+ win.loadURL(isMapUrl(url)?url:ACTIVE_MAP);
  return win;
 }
 function rebuildMenu(){
@@ -43,5 +46,5 @@ function rebuildMenu(){
  Menu.setApplicationMenu(menu);
 }
 function setTheme(theme){prefs.theme=theme;nativeTheme.themeSource=theme;savePrefs();rebuildMenu();}
-app.whenReady().then(()=>{app.setName(APP);loadPrefs();nativeTheme.themeSource=prefs.theme;rebuildMenu();openWindow(prefs.restoreSession&&isMapUrl(prefs.lastUrl)?prefs.lastUrl:MAP_URL);app.on('activate',()=>{if(BrowserWindow.getAllWindows().length===0)openWindow();});});
+app.whenReady().then(()=>{app.setName(APP);loadPrefs();nativeTheme.themeSource=prefs.theme;rebuildMenu();openWindow(prefs.restoreSession&&isMapUrl(prefs.lastUrl)?prefs.lastUrl:ACTIVE_MAP);app.on('activate',()=>{if(BrowserWindow.getAllWindows().length===0)openWindow();});});
 app.on('window-all-closed',()=>{if(process.platform!=='darwin')app.quit();});
