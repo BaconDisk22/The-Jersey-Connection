@@ -44,7 +44,7 @@ These are branding targets, not a claim that every screen has already been resty
 
 **Chosen approach:** A desktop window connecting to the existing online [MeshMap.net](https://meshmap.net/) service. No local map backend or offline node database is planned for this edition.
 
-**Current status:** The Intel desktop application, DMG, and automated release workflow have **not yet been verified or published**. A working installer is not available from this README. Future builds should be validated before appearing in [Releases](https://github.com/BaconDisk22/The-Jersey-Connection/releases).
+**Build and release status:** Intel packaging has passed pull-request checks. The automated release workflow publishes successful `main` builds as preview prereleases. Check [GitHub Releases](https://github.com/BaconDisk22/The-Jersey-Connection/releases) for a downloadable DMG and ZIP; availability is not guaranteed until the publishing workflow succeeds. Builds are unsigned and not notarized.
 
 ## 📡 How do I get my node in the family?
 Your node must report position data to Meshtastic's public MQTT system, either directly or through another reporting node. Read the [official Meshtastic MQTT documentation](https://meshtastic.org/docs/software/integrations/mqtt/) and the public-server restrictions. Think carefully about location privacy before sharing position information.
@@ -53,7 +53,7 @@ Your node must report position data to Meshtastic's public MQTT system, either d
 This fork retains the upstream Go ingestion service and website architecture. The original source includes `cmd/meshobserv/`, `internal/`, `website/`, and `Dockerfile.meshobserv`. The map requires a functioning `/nodes.json` data endpoint when independently hosted. A new coat of Jersey paint doesn't magically deploy the backend, capisce?
 
 ## 📦 Releases & packages
-The planned first release is **v1.0.0-beta.1**, prioritizing an Intel Mac DMG and zipped app. Release artifacts will be listed in [GitHub Releases](https://github.com/BaconDisk22/The-Jersey-Connection/releases) **only after successful builds**. Signing and notarization may be needed for a smooth macOS installation.
+The application version is **1.0.0-beta.1**. Successful builds from `main` are configured to publish uniquely tagged **preview prereleases** containing an Intel Mac DMG, zipped app, and `SHA256SUMS.txt`. Visit [GitHub Releases](https://github.com/BaconDisk22/The-Jersey-Connection/releases) to confirm an installer is available. Signing and notarization are not configured. To open an unsigned app on macOS, Control-click the app in Finder and choose **Open**; if blocked, use **System Settings → Privacy & Security → Open Anyway** only after verifying the source and checksum.
 
 ## 🤝 Respect the family
 **The Jersey Connection** is an independent, unofficial themed fork of [MeshMap.net by Brian Shea](https://github.com/brianshea2/meshmap.net). Credit belongs to the original maintainers and Meshtastic contributors; original licensing and copyright notices must be preserved. This project is not an official Meshtastic application and is not affiliated with any television show or commercial brand.
