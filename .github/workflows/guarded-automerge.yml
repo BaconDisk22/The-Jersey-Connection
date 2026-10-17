@@ -23,7 +23,12 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          # Fail closed unless main is protected with required status checks.\n          protection="$(gh api "repos/$REPO/branches/main/protection" 2>/dev/null || true)"\n          if [[ -z "$protection" ]] || ! jq -e '.required_status_checks.contexts | index("validate")' <<<"$protection" >/dev/null; then\n            echo "Branch protection requiring validate is not configured; refusing auto-merge"; exit 0\n          fi\n          # No checkout or execution of pull request code with write permissions.
+          # Fail closed unless active branch rules require validate from Actions.
+          rules="$(gh api "repos/$REPO/rules/branches/main" 2>/dev/null || true)"
+          if ! jq -e 'any(.[]; .type == "required_status_checks" and any(.parameters.required_status_checks[]; .context == "validate" and .integration_id == 15368))' <<<"$rules" >/dev/null; then
+            echo "Required validate check is not configured; refusing auto-merge"; exit 0
+          fi
+          # No checkout or execution of pull request code with write permissions.
           prs="$(gh api "repos/$REPO/actions/runs/$RUN_ID" --jq '.pull_requests[].number')"
           for pr in $prs; do
             data="$(gh api "repos/$REPO/pulls/$pr")"
